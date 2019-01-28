@@ -1,0 +1,50 @@
+.App {
+  text-align: center;
+}
+
+.App > * {
+    margin-bottom: 48px;
+}
+
+#last-matches-header,
+#ladder-header {
+    margin-top: 24px;
+    margin-bottom: 4px;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#ladder {
+    display: grid;
+    border-top: 1px solid black;
+    width: 50%; /* centering */
+    margin-left: 25%;
+}
+
+.ladder-row > div {
+    display: inline-block;
+    padding: 6px 12px 6px 12px;
+    width: calc(50% - 25px);
+    text-align: left;
+}
+
+.ladder-row > div:first-child {
+    border-right: 1px solid black;
+    text-align: right;
+}
+
+.ladder-row-hline {
+    /*border-top: 1px solid black;*/
+    border-bottom: 1px solid black;
+    width: 80%;
+    margin-left: 10%;
+}
+
+#ladder > .ladder-row:first-child > div {
+    padding-top: 6px;
+}
+
+#ladder > .ladder-row:last-child > div {
+    padding-bottom: 36px;
+}
