@@ -21,7 +21,9 @@ open class GameService {
     @Autowired
     open lateinit var eloChanges: EloChangeEventRepository
 
-    private fun createPlayer(playerName: String): Player {
+    fun createPlayer(playerName: String): Player? {
+        if (players.findPlayerByName(playerName).isPresent)
+            return null
         return players.save(Player(playerName))
     }
 
@@ -43,7 +45,9 @@ open class GameService {
     }
 
     fun getPlayer(name: String): Player {
-        return players.findPlayerByName(name).takeIf { it.isPresent }?.get() ?: createPlayer(name)
+        return players.findPlayerByName(name).orElseThrow {
+            Exception("Player not found: $name. Please create player first.")
+        }
     }
 
     public fun getPlayerHistory(playerName: String): List<Map<String, Any>> {

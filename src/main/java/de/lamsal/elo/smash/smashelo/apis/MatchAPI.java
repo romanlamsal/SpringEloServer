@@ -4,8 +4,11 @@ import de.lamsal.elo.smash.smashelo.game.GameService;
 import de.lamsal.elo.smash.smashelo.model.EloChangeEvent;
 import de.lamsal.elo.smash.smashelo.model.Player;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -15,21 +18,24 @@ public class MatchAPI {
     @Autowired
     GameService gameService;
 
-    @RequestMapping("/api/match")
-    public void match(@RequestBody Map<String, String> body) {
+    @RequestMapping(value = "/api/player", method = RequestMethod.PUT)
+    public void createPlayer(@RequestParam String playerName, HttpServletResponse response) {
+        try {
+            gameService.createPlayer(playerName);
+            response.setStatus(HttpServletResponse.SC_CREATED);
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_CONFLICT);
+        }
+    }
+
+    @RequestMapping(value = "/api/match", method = RequestMethod.POST)
+    public void registerMatch(@RequestBody Map<String, String> body) {
         gameService.matchByIDs(body.get("winner"), body.get("loser"));
     }
 
-    @RequestMapping("/api/elo")
+    @RequestMapping(value = "/api/elo", method = RequestMethod.GET)
     public String getPlayerElo(@RequestParam("id") String id) {
         Player player = gameService.getPlayer(id);
-        if (player != null)
-            return String.valueOf(player.getElo());
-        return null;
-    }
-
-    @RequestMapping("/api/findByMatch/{matchId}")
-    public void foo(@PathVariable long matchId) {
-        gameService.undoMatch(matchId);
+        return String.valueOf(player.getElo());
     }
 }
